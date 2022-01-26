@@ -1,0 +1,21 @@
+bind print = bind("echo");
+
+fn odd(n) -> bool {
+    if n == 0 {
+        return False;
+    }
+    else {
+        return even(n - 1);
+    }
+}
+
+fn even(n) -> bool {
+    if n == 0 {
+        return True;
+    }
+    else {
+        return odd(n - 1);
+    }
+}
+
+print(odd(21));

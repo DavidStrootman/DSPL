@@ -1,0 +1,13 @@
+bind print = "echo"
+
+
+fn hello_world() -> int {
+    int foo = 3             # Assign integer 3 to variable foo
+    str bar = "three"       # Assign string "three" to variable bar
+
+    print bar               # Value of bar is printed
+
+    foo                     # Last statement is returned
+}
+
+hello_world()               # Last statement is returned

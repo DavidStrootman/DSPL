@@ -1,0 +1,13 @@
+bind print = bind("echo");
+
+fn summy(n) -> int {
+    int result = 0
+    while n >= 1 {
+        result += n
+        n -= 1
+    }
+
+    result
+}
+
+summy(1400)
