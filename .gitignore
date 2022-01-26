@@ -130,3 +130,6 @@ dmypy.json
 
 # Python
 python/
+
+# PyCharm
+.idea/
