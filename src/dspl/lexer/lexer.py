@@ -10,8 +10,8 @@ import re
 from typing import TYPE_CHECKING, TypeAlias, TextIO
 
 from dspl.lexer import StreamBundle, TextStream
-from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
-    WhitespaceLexerToken
+from dspl.lexer_tokens import LexerToken, ColonLexerToken, CommaLexerToken, DelimLexerToken, DotLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
+    WhitespaceLexerToken, RawIdentLexerToken, SemiColonLexerToken
 from dspl.lexer.lex_util import DebugData, Word
 
 FileLexer: TypeAlias = Iterator[LexerToken]
@@ -27,9 +27,9 @@ def lex_file(file: Path) -> FileLexer:
     :return: An iterator over lexer tokens.
     """
     with TextStream(file, 'r', encoding="utf-8") as input_stream:
-        contents = lex_file_contents(input_stream)
+        contents = list(lex_file_contents(input_stream))
 
-        print("hey")
+    return contents
 
 def lex_file_contents(stream: TextStream) -> Iterator[LexerToken]:
     return _exhaustive_lex_tokens(stream)
@@ -52,25 +52,28 @@ def lex_token(stream: TextStream) -> StreamBundle:
     :param word: The word to lex into a token.
     :return: A lexer token.
     """
-    token_types = [WhitespaceLexerToken, KeywordLexerToken, OpLexerToken, DelimLexerToken, LiteralLexerToken]
+    # singlechar tokens
+    if (whitespace_token := WhitespaceLexerToken.try_collect(stream)).token:
+        return whitespace_token
+    elif (delim_token := DelimLexerToken.try_collect(stream)).token:
+        return delim_token
+    elif (colon_token := ColonLexerToken.try_collect(stream)).token:
+        return colon_token
+    elif (comma_token := CommaLexerToken.try_collect(stream)).token:
+        return comma_token
+    elif (dot_token := DotLexerToken.try_collect(stream)).token:
+        return dot_token
+    elif (semicolon_token := SemiColonLexerToken.try_collect(stream)).token:
+        return semicolon_token
 
-    return \
-        next(
-            filter(
-                lambda bundle: bundle.token,
-                map(
-                    partial(
-                        _try_collect,
-                        StreamBundle(None, stream)
-                    ),
-                    token_types
-                )
-            )
-        )
+    # multichar tokens
+    elif (op_token := OpLexerToken.try_collect(stream)).token:
+        return op_token
+    elif (literal_token := LiteralLexerToken.try_collect(stream)).token:
+        return literal_token
+    elif (raw_ident_token := RawIdentLexerToken.try_collect(stream)).token:
+        return raw_ident_token
 
 
-def _try_collect(bundle: StreamBundle, token_type: type[LexerToken]) -> StreamBundle:
-    if (bundle_ := token_type.try_collect(bundle.stream)).token:
-        return StreamBundle(token_type(bundle_.token), bundle_.stream)
-    else:
-        return StreamBundle(None, bundle_.stream)
+    # TODO: Spedelim_lexer_token.pycify error
+    raise RuntimeError(f"Unexpected char: {next(stream)}")

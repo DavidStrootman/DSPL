@@ -10,5 +10,6 @@ if __name__ == "__main__":
     print("Hello, World!")
 
     input_file_path: Path = Path("/home/david/repos/DSPL/examples/loop/loop.dspl")
-    [token for token in lex_file(input_file_path)]
+    lexed_file = lex_file(input_file_path)
+    lexed_list = list(lexed_file)
 
