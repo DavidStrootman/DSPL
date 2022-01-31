@@ -30,9 +30,13 @@ class TextStream:
         self._IO.close()
         self._context = False
 
-    def peek(self) -> str:
-        self._peeked.append(next(self))
-        return self._peeked[-1]
+    def peek(self, count:int=1) -> str:
+        if not self._context:
+            raise ValueError(
+                "Tried to get token from a closed file. Make sure the TextStream has been opened using a context manager.")
+
+        self._peeked.extend(list(self._IO.read(count - len(self._peeked))))
+        return "".join(self._peeked[0:count])
 
     def __next__(self):
         """
@@ -58,10 +62,6 @@ class TextStream:
         Grab chars from the text string until the delim is reached (exclusive).
         """
         next_char = self.peek()
-        if next_char == "\n":
-            # TODO: Specify error into lexer error
-            # TODO: better errors with debug data
-            raise RuntimeError("Expected delimiter before end of line")
 
         if pred(next_char):
             return ""

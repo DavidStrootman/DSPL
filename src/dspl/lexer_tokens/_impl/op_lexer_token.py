@@ -30,11 +30,11 @@ class OpLexerToken(LexerToken):
         first_char = stream.peek()
 
         if first_char in OpLexerTokenKind.values():
-            second_char = stream.peek()
+            first_two_chars = stream.peek(2)
 
-            if first_char + second_char in ComplexOpLexerTokenKind.values():
+            if first_two_chars in ComplexOpLexerTokenKind.values():
                 stream.grab(2)
-                return StreamBundle(OpLexerToken(ComplexOpLexerTokenKind(first_char + second_char)), stream)
+                return StreamBundle(OpLexerToken(ComplexOpLexerTokenKind(first_two_chars)), stream)
 
             next(stream)
             return StreamBundle(OpLexerToken(OpLexerTokenKind(first_char)), stream)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from pprint import pprint
 from pathlib import Path
 import sys
 
@@ -10,6 +10,5 @@ if __name__ == "__main__":
     print("Hello, World!")
 
     input_file_path: Path = Path("/home/david/repos/DSPL/examples/loop/loop.dspl")
-    lexed_file = lex_file(input_file_path)
-    lexed_list = list(lexed_file)
-
+    lexed_tokens = lex_file(input_file_path)
+    pprint(lexed_tokens)

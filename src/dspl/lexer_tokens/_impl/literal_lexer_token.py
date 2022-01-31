@@ -5,7 +5,7 @@ from dspl.lexer_tokens import LexerToken
 
 class LiteralLexerTokenKind(ValuableEnum):
     STRING = "\""
-    NUMBER = "UNSET_NUMBER"
+    NUMBER = "NUMBER"
 
 
 class LiteralLexerToken(LexerToken):
