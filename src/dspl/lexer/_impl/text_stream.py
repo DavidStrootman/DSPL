@@ -5,6 +5,10 @@ from typing import Callable, Optional, TextIO
 from dspl.lexer_tokens import LexerToken
 
 
+# TODO: Just refactor everything with context management. This is far too coupled to file IO atm, can't even lex a
+# single token without having to create a file to test.
+
+
 class TextStream:
     """
     Iterator over tokens. Wraps a TextIO stream, and adds some functionality, such as peeking.

@@ -10,16 +10,12 @@ import re
 from typing import TYPE_CHECKING, TypeAlias, TextIO
 
 from dspl.lexer import StreamBundle, TextStream
+from dspl.lexer.lex_util import DebugData
 from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
     RawIdentLexerToken, StructuralLexerToken, WhitespaceLexerToken
-from dspl.lexer.lex_util import DebugData, Word
-
-FileLexer: TypeAlias = Iterator[LexerToken]
-
-_WordReader: TypeAlias = Iterator[Word]
 
 
-def lex_file(file: Path) -> FileLexer:
+def lex_file(file: Path) -> list[LexerToken]:
     """
     Lex all tokens from a file.
 
@@ -27,12 +23,19 @@ def lex_file(file: Path) -> FileLexer:
     :return: An iterator over lexer tokens.
     """
     with TextStream(file, 'r', encoding="utf-8") as input_stream:
+        # Since the input stream manages context, we must either expand the file in the beginning, or the iterator over
+        #  Lexer tokens in the end.
+        # NOTE: If we are not allowed to use the mutating peekable input stream, it is probably better to convert the
+        #  input file to a file immediately, so we do not need to manage context and can just return the updated version
+        #  immediately.
         contents = list(lex_file_contents(input_stream))
 
     return contents
 
+
 def lex_file_contents(stream: TextStream) -> Iterator[LexerToken]:
     return _expand_lexer_tokens(_exhaustive_lex_tokens(stream))
+
 
 def _expand_lexer_token(token: LexerToken) -> LexerToken:
     if isinstance(token, RawIdentLexerToken):
@@ -40,9 +43,8 @@ def _expand_lexer_token(token: LexerToken) -> LexerToken:
     return token
 
 
-def _expand_lexer_tokens(tokens = list[LexerToken]) -> list[LexerToken]:
+def _expand_lexer_tokens(tokens=list[LexerToken]) -> list[LexerToken]:
     return [_expand_lexer_token(token) for token in tokens]
-
 
 
 def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
@@ -74,7 +76,6 @@ def lex_token(stream: TextStream) -> LexerToken:
         return literal_token
     elif (raw_ident_token := RawIdentLexerToken.try_collect(stream)).token:
         return raw_ident_token
-
 
     # TODO: Specify error
     raise RuntimeError(f"Unexpected char: \"{next(stream)}\"")

@@ -1,8 +1,7 @@
-from abc import ABC
 
 
-class PrintableABC(ABC):
-    """Printable ABC."""
+class PrintableBase:
+    """Printable Baseclass."""
     def __str__(self) -> str:
         return f"{self.__class__.__name__}"
 
