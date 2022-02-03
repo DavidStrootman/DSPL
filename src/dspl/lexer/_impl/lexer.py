@@ -9,10 +9,10 @@ from pathlib import Path
 import re
 from typing import TYPE_CHECKING, TypeAlias, TextIO
 
-from dspl.lexer import TextStream
 from dspl.lexer.lex_util import DebugData
 from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
     RawIdentLexerToken, StructuralLexerToken, WhitespaceLexerToken
+from dspl.lexer.text_stream import TextStream
 
 
 def lex_file(file: Path) -> list[LexerToken]:
@@ -62,6 +62,9 @@ def lex_token(stream: TextStream) -> LexerToken:
     :param stream: The stream to lex from.
     :return: A lexer token and the modified stream.
     """
+    if not stream.peek():
+        raise ValueError("Cannot lex token from empty stream.")
+
     if (result := WhitespaceLexerToken.try_collect(stream))[0]:
         return result
     elif (result := StructuralLexerToken.try_collect(stream))[0]:
@@ -76,4 +79,4 @@ def lex_token(stream: TextStream) -> LexerToken:
         return result
 
     # TODO: Specify error
-    raise RuntimeError(f"Unexpected char: \"{next(stream)}\"")
+    raise RuntimeError(f"Unexpected char: \"{stream.peek()}\"")

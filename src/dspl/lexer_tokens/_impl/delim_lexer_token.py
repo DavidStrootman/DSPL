@@ -1,8 +1,8 @@
 from typing import Optional
 
 from dspl.helper import ValuableEnum
-from dspl.lexer import TextStream
 from dspl.lexer_tokens import LexerToken
+from dspl.lexer.text_stream import TextStream
 
 
 class DelimLexerTokenKind(ValuableEnum):
@@ -18,10 +18,7 @@ class DelimLexerTokenKind(ValuableEnum):
 
 class DelimLexerToken(LexerToken):
     def __init__(self, kind: DelimLexerTokenKind):
-        super().__init__()
-
-        self.kind = kind
-        self.value = kind.value
+        super().__init__(kind, kind.value)
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:

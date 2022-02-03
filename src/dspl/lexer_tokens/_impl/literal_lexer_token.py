@@ -1,7 +1,7 @@
 from typing import Optional
 
 from dspl.helper import ValuableEnum
-from dspl.lexer import grab_until, TextStream
+from dspl.lexer.text_stream import grab_until, TextStream
 from dspl.lexer_tokens import LexerToken
 
 
@@ -17,10 +17,8 @@ class LiteralLexerToken(LexerToken):
         Strings are denoted by the use of "", while numbers can be placed
         immediately in code, e.g. 124292. This is because variables can only use A-Za-z.
         """
-        super().__init__()
+        super().__init__(kind, value)
 
-        self.kind = kind
-        self.value = value
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:

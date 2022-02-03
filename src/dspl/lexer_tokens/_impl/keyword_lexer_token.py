@@ -20,10 +20,7 @@ class KeywordLexerToken(LexerToken):
     Keyword lexer tokens are created from RawIdentLexerTokens
     """
     def __init__(self, kind: KeywordLexerTokenKind):
-        super().__init__()
-
-        self.kind = kind
-        self.value = kind.value
+        super().__init__(kind, kind.value)
 
     @staticmethod
     def from_raw_ident(ident: "RawIdentLexerToken") -> Union["KeywordLexerToken", "RawIdentLexerToken"]:

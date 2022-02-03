@@ -3,7 +3,7 @@ from pprint import pprint
 from pathlib import Path
 import sys
 
-from lexer.lexer import lex_file
+from dspl.lexer import lex_file
 
 if __name__ == "__main__":
     print(f"Running on Python version {sys.version}")

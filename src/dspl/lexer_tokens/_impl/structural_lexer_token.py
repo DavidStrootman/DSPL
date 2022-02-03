@@ -1,5 +1,5 @@
 from dspl.helper import ValuableEnum
-from dspl.lexer import TextStream
+from dspl.lexer.text_stream import TextStream
 from dspl.lexer_tokens import LexerToken
 
 
@@ -17,10 +17,8 @@ class ComplexStructuralLexerTokenKind(ValuableEnum):
 
 class StructuralLexerToken(LexerToken):
     def __init__(self, kind: StructuralLexerTokenKind | ComplexStructuralLexerTokenKind):
-        super().__init__()
+        super().__init__(kind, kind.value)
 
-        self.kind = kind
-        self.value = kind.value
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[LexerToken, TextStream]:
