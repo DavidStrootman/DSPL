@@ -14,6 +14,8 @@ class WhiteSpaceLexerTokenKind(ValuableEnum):
 
 class WhitespaceLexerToken(LexerToken):
     def __init__(self, kind: WhiteSpaceLexerTokenKind):
+        super().__init__()
+
         self.kind = kind
         self.value = kind.value
 

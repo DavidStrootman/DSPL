@@ -12,6 +12,13 @@ class LiteralLexerTokenKind(ValuableEnum):
 
 class LiteralLexerToken(LexerToken):
     def __init__(self, kind: LiteralLexerTokenKind, value: str):
+        """
+        Literal Lexer Tokens have two types: "string" and "number".
+        Strings are denoted by the use of "", while numbers can be placed
+        immediately in code, e.g. 124292. This is because variables can only use A-Za-z.
+        """
+        super().__init__()
+
         self.kind = kind
         self.value = value
 

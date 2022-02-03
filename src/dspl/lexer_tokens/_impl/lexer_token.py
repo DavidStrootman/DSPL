@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from dspl.lexer_tokens import WhitespaceLexerToken
 
+
 class LexerToken(PrintableBase):
     def __init__(self):
         self.prev_whitespace: Optional["WhitespaceLexerToken"] = None

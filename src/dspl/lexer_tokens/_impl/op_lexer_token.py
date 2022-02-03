@@ -24,6 +24,9 @@ class ComplexOpLexerTokenKind(ValuableEnum):
 
 class OpLexerToken(LexerToken):
     def __init__(self, kind: OpLexerTokenKind | ComplexOpLexerTokenKind):
+        super().__init__()
+
+
         self.kind = kind
         self.value = kind.value
 

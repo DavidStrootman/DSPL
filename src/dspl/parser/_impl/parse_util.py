@@ -1,6 +1,6 @@
 from typing import Iterator, List, Union
-from words.helper.TokenTypeEnum import TokenTypeEnum
-from words.token_types.parser_token import ParserToken
+from dspl.helper import ValuableEnum
+from dspl.parser_tokens import ParserToken
 
 
 class Program:
@@ -11,7 +11,7 @@ class Program:
         self.tokens = tokens
 
 
-def eat_until(tokens: Iterator["LexerToken"], limit_types: List[TokenTypeEnum]) -> List[Union["LexerToken", ParserToken]]:  # noqa: F821, E501
+def eat_until(tokens: Iterator["LexerToken"], limit_types: List[ValuableEnum]) -> List[Union["LexerToken", ParserToken]]:  # noqa: F821, E501
     """
     Parse tokens until the next token matches the limit_type, leaving the last token unparsed.
 
@@ -26,7 +26,7 @@ def eat_until(tokens: Iterator["LexerToken"], limit_types: List[TokenTypeEnum]) 
     return [parsed_token] + eat_until(tokens, limit_types)
 
 
-def eat_until_discarding(tokens: Iterator["LexerToken"], limit_types: List[TokenTypeEnum]) -> List[ParserToken]:  # noqa: F821, E501
+def eat_until_discarding(tokens: Iterator["LexerToken"], limit_types: List[ValuableEnum]) -> List[ParserToken]:  # noqa: F821, E501
     """
     Parse tokens until the next token matches the limit_type, discarding the last token.
 

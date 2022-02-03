@@ -20,6 +20,8 @@ class KeywordLexerToken(LexerToken):
     Keyword lexer tokens are created from RawIdentLexerTokens
     """
     def __init__(self, kind: KeywordLexerTokenKind):
+        super().__init__()
+
         self.kind = kind
         self.value = kind.value
 

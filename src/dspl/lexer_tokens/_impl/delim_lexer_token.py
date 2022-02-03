@@ -18,6 +18,8 @@ class DelimLexerTokenKind(ValuableEnum):
 
 class DelimLexerToken(LexerToken):
     def __init__(self, kind: DelimLexerTokenKind):
+        super().__init__()
+
         self.kind = kind
         self.value = kind.value
 

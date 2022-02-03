@@ -14,6 +14,8 @@ class RawIdentLexerToken(LexerToken):
         """
         Raw Identifiers can be either keywords or plain identifiers
         """
+        super().__init__()
+
         self.kind = kind
         self.value = value
 

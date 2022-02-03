@@ -17,6 +17,8 @@ class ComplexStructuralLexerTokenKind(ValuableEnum):
 
 class StructuralLexerToken(LexerToken):
     def __init__(self, kind: StructuralLexerTokenKind | ComplexStructuralLexerTokenKind):
+        super().__init__()
+
         self.kind = kind
         self.value = kind.value
 

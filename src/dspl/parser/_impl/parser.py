@@ -21,6 +21,7 @@ def parse(tokens: Iterator[LexerToken]) -> Program:
     program = Program(parsed_tokens)
     return program
 
+
 def _parse_exhaustive(tokens: Iterator[LexerToken]) -> List[ParserToken]:
     """
     parse parser tokens from iterator until it is empty.

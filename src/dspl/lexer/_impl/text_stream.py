@@ -19,7 +19,7 @@ class TextStream:
     def __init__(self, text: str):
         self._text: str = text
 
-    def grab(self, count: int=1) -> tuple[str, "TextStream"]:
+    def grab(self, count: int = 1) -> tuple[str, "TextStream"]:
         """
         Grabs the first count values, calling __next__ on self count times.
         """
@@ -36,6 +36,7 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
     """
     Grab chars from the text string until the delim is reached (exclusive).
     """
+
     def _grab_until_internal(pred: Callable[(str), bool], stream: "TextStream"):
         peeked_char = stream.peek()
 
@@ -45,6 +46,5 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
         next_char, stream = stream.grab()
 
         return (next_char, _grab_until_internal(pred, stream))
-
 
     return mapx((lambda x: "".join(x), lambda x: x), split_last(flatten_rec_seq(_grab_until_internal(pred, stream))))
