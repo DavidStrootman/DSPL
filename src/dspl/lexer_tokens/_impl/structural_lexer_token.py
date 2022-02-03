@@ -25,14 +25,14 @@ class StructuralLexerToken(LexerToken):
         first_two_chars = stream.peek(2)
 
         if first_two_chars in ComplexStructuralLexerTokenKind.values():
-            stream.grab(2)
+            _, stream = stream.grab(2)
             return StreamBundle(StructuralLexerToken(ComplexStructuralLexerTokenKind(first_two_chars)),
                                 stream)
 
         first_char = stream.peek()
 
         if first_char in StructuralLexerTokenKind.values():
-            next(stream)
+            _, stream = stream.grab()
             return StreamBundle(StructuralLexerToken(StructuralLexerTokenKind(first_char)), stream)
 
         return StreamBundle(None, stream)

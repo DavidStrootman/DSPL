@@ -1,5 +1,5 @@
 from dspl.helper import ValuableEnum
-from dspl.lexer import TextStream, StreamBundle
+from dspl.lexer import grab_until, TextStream, StreamBundle
 from dspl.lexer_tokens import LexerToken
 
 
@@ -19,17 +19,17 @@ class LiteralLexerToken(LexerToken):
 
         if first_char in LiteralLexerTokenKind.values():
             # It's a string literal
-            opening_char: str = next(stream)
-            literal: str = "".join(stream.grab_until(lambda x: x == opening_char))
+            opening_char, stream = stream.grab()
+            literal, stream = grab_until(lambda x: x == opening_char, stream)
 
             # Discard closing double quote
-            next(stream)
+            _, stream = stream.grab()
 
             return StreamBundle(LiteralLexerToken(LiteralLexerTokenKind(opening_char), literal), stream)
 
         if first_char.isnumeric():
             # It's a number literal
-            literal = "".join(stream.grab_until(lambda x: not x.isnumeric()))
+            literal, stream = grab_until(lambda x: not x.isnumeric(), stream)
             return StreamBundle(LiteralLexerToken(LiteralLexerTokenKind.NUMBER, literal), stream)
 
         return StreamBundle(None, stream)

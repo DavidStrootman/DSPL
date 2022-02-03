@@ -25,7 +25,7 @@ class DelimLexerToken(LexerToken):
         first_char = stream.peek()
 
         if first_char in DelimLexerTokenKind.values():
-            next(stream)
+            _, stream = stream.grab()
             return StreamBundle(DelimLexerToken(DelimLexerTokenKind(first_char)), stream)
 
         return StreamBundle(None, stream)

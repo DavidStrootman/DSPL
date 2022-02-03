@@ -20,7 +20,7 @@ class WhitespaceLexerToken(LexerToken):
         first_char = stream.peek()
 
         if first_char in WhiteSpaceLexerTokenKind.values():
-            value = next(stream)
+            value, stream = stream.grab()
             return StreamBundle(WhitespaceLexerToken(WhiteSpaceLexerTokenKind(first_char)), stream)
 
         return StreamBundle(None, stream)
