@@ -41,7 +41,7 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
         peeked_char = stream.peek()
 
         if pred(peeked_char):
-            return stream
+            return ("", stream)
 
         next_char, stream = stream.grab()
 

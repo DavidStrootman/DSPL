@@ -24,21 +24,20 @@ class LiteralLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
-        first_char = stream.peek()
+        first_char, stream = stream.grab()
 
         if first_char in LiteralLexerTokenKind.values():
             # It's a string literal
-            opening_char, stream = stream.grab()
-            literal, stream = grab_until(lambda x: x == opening_char, stream)
+            literal, stream = grab_until(lambda x: x == first_char, stream)
 
             # Discard closing double quote
             _, stream = stream.grab()
 
-            return LiteralLexerToken(LiteralLexerTokenKind(opening_char), literal), stream
+            return LiteralLexerToken(LiteralLexerTokenKind(first_char), literal), stream
 
         if first_char.isnumeric():
             # It's a number literal
             literal, stream = grab_until(lambda x: not x.isnumeric(), stream)
-            return LiteralLexerToken(LiteralLexerTokenKind.NUMBER, literal), stream
+            return LiteralLexerToken(LiteralLexerTokenKind.NUMBER, first_char + literal), stream
 
         return None, stream

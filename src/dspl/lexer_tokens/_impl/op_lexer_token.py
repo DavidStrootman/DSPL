@@ -32,16 +32,15 @@ class OpLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
-        first_char = stream.peek()
+        first_char, stream = stream.grab()
 
         if first_char in OpLexerTokenKind.values():
-            first_two_chars = stream.peek(2)
+            second_char = stream.peek()
 
-            if first_two_chars in ComplexOpLexerTokenKind.values():
-                _, stream = stream.grab(2)
-                return OpLexerToken(ComplexOpLexerTokenKind(first_two_chars)), stream
+            if first_char+second_char in ComplexOpLexerTokenKind.values():
+                second_char, stream = stream.grab()
+                return OpLexerToken(ComplexOpLexerTokenKind(first_char+second_char)), stream
 
-            _, stream = stream.grab()
             return OpLexerToken(OpLexerTokenKind(first_char)), stream
 
         return None, stream

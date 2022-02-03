@@ -25,10 +25,9 @@ class DelimLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
-        first_char = stream.peek()
+        first_char, stream = stream.grab()
 
         if first_char in DelimLexerTokenKind.values():
-            _, stream = stream.grab()
             return DelimLexerToken(DelimLexerTokenKind(first_char)), stream
 
         return None, stream

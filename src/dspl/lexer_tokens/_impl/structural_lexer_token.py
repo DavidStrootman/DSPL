@@ -24,16 +24,19 @@ class StructuralLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[LexerToken, TextStream]:
-        first_two_chars = stream.peek(2)
-
-        if first_two_chars in ComplexStructuralLexerTokenKind.values():
-            _, stream = stream.grab(2)
-            return StructuralLexerToken(ComplexStructuralLexerTokenKind(first_two_chars)), stream
-
-        first_char = stream.peek()
+        first_char, stream = stream.grab()
 
         if first_char in StructuralLexerTokenKind.values():
-            _, stream = stream.grab()
+            second_char = stream.peek()
+
+            if first_char+second_char in ComplexStructuralLexerTokenKind.values():
+                second_char, stream = stream.grab()
+                return StructuralLexerToken(ComplexStructuralLexerTokenKind(first_char+second_char)), stream
+
             return StructuralLexerToken(StructuralLexerTokenKind(first_char)), stream
+
+
+
+
 
         return None, stream

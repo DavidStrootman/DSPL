@@ -21,10 +21,9 @@ class WhitespaceLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
-        first_char = stream.peek()
+        first_char, stream = stream.grab()
 
         if first_char in WhiteSpaceLexerTokenKind.values():
-            value, stream = stream.grab()
             return WhitespaceLexerToken(WhiteSpaceLexerTokenKind(first_char)), stream
 
         return None, stream
