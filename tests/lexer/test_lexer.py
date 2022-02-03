@@ -1,7 +1,9 @@
 from pathlib import Path
 
-from dspl.lexer import TextStream
-from dspl.lexer.lexer import lex_token, lex_file, lex_file_contents
+import pytest
+
+from dspl.lexer import lex_token
+from dspl.lexer.text_stream import TextStream
 
 
 class TestLexer:
@@ -9,14 +11,25 @@ class TestLexer:
         content = "dksnkdnskfls"
 
         stream = TextStream(content)
-        result = lex_token(stream)
+        result, _ = lex_token(stream)
         assert result.value == content
+
+    def test_lex_token_invalid(self):
+        content = "你好dksnkdnskfls"
+        stream = TextStream(content)
+
+        with pytest.raises(RuntimeError):
+            result, _ = lex_token(stream)
+
+    def test_lex_token_none(self):
+        content = ""
+        stream = TextStream(content)
+
+        with pytest.raises(ValueError):
+            result, _ = lex_token(stream)
 
     def test_lex_file_contents(self):
         content = "kndfiqwpoieoqw"
 
     def test_lex_file(self):
-        file_name: Path = Path("./test_lex_token")
-        content = "AaZz"
-        with _LexableFile(file_name) as file:
-            lex_token()
+        pass
