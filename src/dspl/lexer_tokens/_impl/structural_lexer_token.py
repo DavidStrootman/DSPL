@@ -1,5 +1,5 @@
 from dspl.helper import ValuableEnum
-from dspl.lexer import TextStream, StreamBundle
+from dspl.lexer import TextStream
 from dspl.lexer_tokens import LexerToken
 
 
@@ -21,18 +21,17 @@ class StructuralLexerToken(LexerToken):
         self.value = kind.value
 
     @staticmethod
-    def try_collect(stream: TextStream) -> StreamBundle:
+    def try_collect(stream: TextStream) -> tuple[LexerToken, TextStream]:
         first_two_chars = stream.peek(2)
 
         if first_two_chars in ComplexStructuralLexerTokenKind.values():
             _, stream = stream.grab(2)
-            return StreamBundle(StructuralLexerToken(ComplexStructuralLexerTokenKind(first_two_chars)),
-                                stream)
+            return StructuralLexerToken(ComplexStructuralLexerTokenKind(first_two_chars)), stream
 
         first_char = stream.peek()
 
         if first_char in StructuralLexerTokenKind.values():
             _, stream = stream.grab()
-            return StreamBundle(StructuralLexerToken(StructuralLexerTokenKind(first_char)), stream)
+            return StructuralLexerToken(StructuralLexerTokenKind(first_char)), stream
 
-        return StreamBundle(None, stream)
+        return None, stream

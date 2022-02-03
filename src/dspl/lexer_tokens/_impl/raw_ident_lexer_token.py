@@ -1,5 +1,7 @@
+from typing import Optional
+
 from dspl.helper import ValuableEnum
-from dspl.lexer import grab_until, TextStream, StreamBundle
+from dspl.lexer import grab_until, TextStream
 from dspl.lexer_tokens import LexerToken
 
 
@@ -16,9 +18,9 @@ class RawIdentLexerToken(LexerToken):
         self.value = value
 
     @staticmethod
-    def try_collect(stream: TextStream) -> StreamBundle:
+    def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
         grabbed, stream = grab_until(lambda x: not x.isalpha(), stream)
         if grabbed:
-            return StreamBundle(RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "".join(grabbed)), stream)
+            return RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "".join(grabbed)), stream
 
-        return StreamBundle(None, stream)
+        return None, stream

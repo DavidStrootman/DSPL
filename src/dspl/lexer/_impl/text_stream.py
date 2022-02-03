@@ -51,11 +51,3 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
     return ret
 
 
-@dataclass
-class StreamBundle:
-    """
-    Helper class that bundles a possible Token and the stream it would be collected from.
-    """
-    token: Optional[LexerToken]
-    stream: TextStream
-

@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 from typing import TYPE_CHECKING, TypeAlias, TextIO
 
-from dspl.lexer import StreamBundle, TextStream
+from dspl.lexer import TextStream
 from dspl.lexer.lex_util import DebugData
 from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
     RawIdentLexerToken, StructuralLexerToken, WhitespaceLexerToken
@@ -50,30 +50,30 @@ def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
         return
     else:
         # We do a little unpacking
-        bundle = lex_token(stream)
-        yield bundle.token
-        yield from _exhaustive_lex_tokens(bundle.stream)
+        token, stream = lex_token(stream)
+        yield token
+        yield from _exhaustive_lex_tokens(stream)
 
 
 def lex_token(stream: TextStream) -> LexerToken:
     """
     Lex a single word from a Text stream.
 
-    :param word: The word to lex into a token.
-    :return: A lexer token.
+    :param stream: The stream to lex from.
+    :return: A lexer token and the modified stream.
     """
-    if (whitespace_token := WhitespaceLexerToken.try_collect(stream)).token:
-        return whitespace_token
-    elif (structural_token := StructuralLexerToken.try_collect(stream)).token:
-        return structural_token
-    elif (delim_token := DelimLexerToken.try_collect(stream)).token:
-        return delim_token
-    elif (op_token := OpLexerToken.try_collect(stream)).token:
-        return op_token
-    elif (literal_token := LiteralLexerToken.try_collect(stream)).token:
-        return literal_token
-    elif (raw_ident_token := RawIdentLexerToken.try_collect(stream)).token:
-        return raw_ident_token
+    if (result := WhitespaceLexerToken.try_collect(stream))[0]:
+        return result
+    elif (result := StructuralLexerToken.try_collect(stream))[0]:
+        return result
+    elif (result := DelimLexerToken.try_collect(stream))[0]:
+        return result
+    elif (result := OpLexerToken.try_collect(stream))[0]:
+        return result
+    elif (result := LiteralLexerToken.try_collect(stream))[0]:
+        return result
+    elif (result := RawIdentLexerToken.try_collect(stream))[0]:
+        return result
 
     # TODO: Specify error
     raise RuntimeError(f"Unexpected char: \"{next(stream)}\"")

@@ -1,5 +1,7 @@
+from typing import Optional
+
 from dspl.helper import ValuableEnum
-from dspl.lexer import TextStream, StreamBundle
+from dspl.lexer import TextStream
 from dspl.lexer_tokens import LexerToken
 
 
@@ -26,7 +28,7 @@ class OpLexerToken(LexerToken):
         self.value = kind.value
 
     @staticmethod
-    def try_collect(stream: TextStream) -> StreamBundle:
+    def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
         first_char = stream.peek()
 
         if first_char in OpLexerTokenKind.values():
@@ -34,9 +36,9 @@ class OpLexerToken(LexerToken):
 
             if first_two_chars in ComplexOpLexerTokenKind.values():
                 _, stream = stream.grab(2)
-                return StreamBundle(OpLexerToken(ComplexOpLexerTokenKind(first_two_chars)), stream)
+                return OpLexerToken(ComplexOpLexerTokenKind(first_two_chars)), stream
 
             _, stream = stream.grab()
-            return StreamBundle(OpLexerToken(OpLexerTokenKind(first_char)), stream)
+            return OpLexerToken(OpLexerTokenKind(first_char)), stream
 
-        return StreamBundle(None, stream)
+        return None, stream
