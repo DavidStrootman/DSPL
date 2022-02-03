@@ -24,10 +24,7 @@ def lex_file(file: Path) -> list[LexerToken]:
     """
     with open(file, 'r', encoding="utf-8") as input_file:
         # Since the input stream manages context, we must either expand the file in the beginning, or the iterator over
-        #  Lexer tokens in the end.
-        # NOTE: If we are not allowed to use the mutating peekable input stream, it is probably better to convert the
-        #  input file to a file immediately, so we do not need to manage context and can just return the updated version
-        #  immediately.
+        #  Lexer tokens in the end, while the file is still open.
         input_stream = TextStream(input_file.read())
     contents = list(lex_file_contents(input_stream))
 

@@ -26,5 +26,4 @@ def mapx(fns: Sequence[callable], seq: Sequence):
             return fns_[0](seq_[0]), mapx_internal(fns_, seq_[1:])
         return fns_[0](seq_[0]), mapx_internal(fns_[1:], seq_[1:])
 
-    # We strip the last value since it is always empty
     return mapx_internal(fns, seq)

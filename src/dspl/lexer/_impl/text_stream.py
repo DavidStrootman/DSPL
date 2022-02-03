@@ -13,23 +13,23 @@ from dspl.lexer_tokens import LexerToken
 
 class TextStream:
     """
-    TextStream is a static wrapper around the string, guaranteeing no side-effects.
+    TextStream is a static wrapper around the string, "guaranteeing" no side-effects.
     """
 
     def __init__(self, text: str):
-        self.text: str = text
+        self._text: str = text
 
     def grab(self, count: int=1) -> tuple[str, "TextStream"]:
         """
         Grabs the first count values, calling __next__ on self count times.
         """
-        return self.text[0:count], TextStream(self.text[count:])
+        return self._text[0:count], TextStream(self._text[count:])
 
     def peek(self, count=1) -> str:
-        if not self.text:
+        if not self._text:
             return ""
 
-        return self.text[0:count]
+        return self._text[0:count]
 
 
 def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
@@ -37,12 +37,11 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
     Grab chars from the text string until the delim is reached (exclusive).
     """
     def grab_until_internal(pred: Callable[(str), bool], stream: "TextStream"):
-        peeked_char = stream.text[0]
+        peeked_char = stream.peek()
 
         if pred(peeked_char):
             return stream
 
-        # We only increment when the next char is not the delimiter
         next_char, stream = stream.grab()
 
         return (next_char, grab_until_internal(pred, stream))
@@ -56,7 +55,7 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
 class StreamBundle:
     """
     Helper class that bundles a possible Token and the stream it would be collected from.
-
     """
     token: Optional[LexerToken]
     stream: TextStream
+
