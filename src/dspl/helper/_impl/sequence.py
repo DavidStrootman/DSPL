@@ -19,11 +19,11 @@ def split_last(seq: Sequence):
 
 
 def mapx(fns: Sequence[callable], seq: Sequence):
-    def mapx_internal(fns_: Sequence[callable], seq_: Sequence):
+    def _mapx_internal(fns_: Sequence[callable], seq_: Sequence):
         if len(seq_) == 1:
             return fns_[0](seq_[0])
         if len(fns_) == 1:
-            return fns_[0](seq_[0]), mapx_internal(fns_, seq_[1:])
-        return fns_[0](seq_[0]), mapx_internal(fns_[1:], seq_[1:])
+            return fns_[0](seq_[0]), _mapx_internal(fns_, seq_[1:])
+        return fns_[0](seq_[0]), _mapx_internal(fns_[1:], seq_[1:])
 
-    return mapx_internal(fns, seq)
+    return _mapx_internal(fns, seq)

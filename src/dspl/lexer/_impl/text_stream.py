@@ -36,7 +36,7 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
     """
     Grab chars from the text string until the delim is reached (exclusive).
     """
-    def grab_until_internal(pred: Callable[(str), bool], stream: "TextStream"):
+    def _grab_until_internal(pred: Callable[(str), bool], stream: "TextStream"):
         peeked_char = stream.peek()
 
         if pred(peeked_char):
@@ -44,10 +44,7 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
 
         next_char, stream = stream.grab()
 
-        return (next_char, grab_until_internal(pred, stream))
+        return (next_char, _grab_until_internal(pred, stream))
 
 
-    ret = mapx((lambda x: "".join(x), lambda x: x), split_last(flatten_rec_seq(grab_until_internal(pred, stream))))
-    return ret
-
-
+    return mapx((lambda x: "".join(x), lambda x: x), split_last(flatten_rec_seq(_grab_until_internal(pred, stream))))
