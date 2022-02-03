@@ -7,7 +7,6 @@ from lexer.lexer import lex_file
 
 if __name__ == "__main__":
     print(f"Running on Python version {sys.version}")
-    print("Hello, World!")
 
     input_file_path: Path = Path("/home/david/repos/DSPL/examples/loop/loop.dspl")
     lexed_tokens = lex_file(input_file_path)
