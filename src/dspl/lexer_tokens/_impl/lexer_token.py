@@ -1,9 +1,11 @@
 from enum import Enum
+from abc import abstractmethod
+from typing import Optional, TYPE_CHECKING
 
 from dspl.helper import PrintableBase, ValuableEnum
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from dspl.lexer.text_stream import TextStream
     from dspl.lexer_tokens import WhitespaceLexerToken
 
 
@@ -16,5 +18,7 @@ class LexerToken(PrintableBase):
     class _Types(Enum):
         UNSET = "UNSET"
 
-    def match(self, content: str):
+    @staticmethod
+    @abstractmethod
+    def try_collect(stream: "TextStream") -> tuple[Optional["LexerToken"], "TextStream"]:
         pass

@@ -2,7 +2,7 @@
 
 Supplies functionality for reading text from a file and changing them into tokens the parser can accept.
 """
-from collections.abc import Iterator, Iterable
+from collections.abc import Iterator, Iterable, Sequence
 from functools import partial
 from itertools import chain, starmap
 from pathlib import Path
@@ -15,7 +15,7 @@ from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, Li
 from dspl.lexer.text_stream import TextStream
 
 
-def lex_file(file: Path) -> list[LexerToken]:
+def lex_file(file: Path) -> Sequence[LexerToken]:
     """
     Lex all tokens from a file.
 
@@ -26,7 +26,7 @@ def lex_file(file: Path) -> list[LexerToken]:
         # Since the input stream manages context, we must either expand the file in the beginning, or the iterator over
         #  Lexer tokens in the end, while the file is still open.
         input_stream = TextStream(input_file.read())
-    contents = list(lex_file_contents(input_stream))
+    contents = tuple(lex_file_contents(input_stream))
 
     return contents
 
