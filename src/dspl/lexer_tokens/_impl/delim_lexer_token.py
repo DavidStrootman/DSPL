@@ -12,8 +12,7 @@ class DelimLexerTokenKind(ValuableEnum):
     CLOSE_SQUARE = "]"
     OPEN_CURLY = "{"
     CLOSE_CURLY = "}"
-    OPEN_ANGLE = "<"
-    CLOSE_ANGLE = ">"
+
 
 
 class DelimLexerToken(LexerToken):

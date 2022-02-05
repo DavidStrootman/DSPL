@@ -8,7 +8,6 @@ class StructuralLexerTokenKind(ValuableEnum):
     COLON = ":"
     DOT = "."
     COMMA = ","
-    LESSER = "<"
 
 
 class ComplexStructuralLexerTokenKind(ValuableEnum):
@@ -23,18 +22,13 @@ class StructuralLexerToken(LexerToken):
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[LexerToken, TextStream]:
         first_char, stream = stream.grab()
+        second_char = stream.peek()
+
+        if first_char+second_char in ComplexStructuralLexerTokenKind.values():
+            second_char, stream = stream.grab()
+            return StructuralLexerToken(ComplexStructuralLexerTokenKind(first_char+second_char)), stream
 
         if first_char in StructuralLexerTokenKind.values():
-            second_char = stream.peek()
-
-            if first_char+second_char in ComplexStructuralLexerTokenKind.values():
-                second_char, stream = stream.grab()
-                return StructuralLexerToken(ComplexStructuralLexerTokenKind(first_char+second_char)), stream
-
             return StructuralLexerToken(StructuralLexerTokenKind(first_char)), stream
-
-
-
-
 
         return None, stream

@@ -6,8 +6,8 @@ from dspl.lexer_tokens import LexerToken
 
 
 class LiteralLexerTokenKind(ValuableEnum):
-    STRING = "\""
     NUMBER = "NUMBER"
+    STRING = "\""
 
 
 class LiteralLexerToken(LexerToken):

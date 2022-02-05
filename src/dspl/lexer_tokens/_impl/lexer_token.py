@@ -15,7 +15,7 @@ class LexerToken(PrintableBase):
         self.value = value
         self.prev_whitespace: Optional["WhitespaceLexerToken"] = None
 
-    class _Types(Enum):
+    class _Types(ValuableEnum):
         UNSET = "UNSET"
 
     @staticmethod

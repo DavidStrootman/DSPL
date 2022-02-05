@@ -20,7 +20,8 @@ class RawIdentLexerToken(LexerToken):
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
         # Since we allow A-Za-z, but not for example Chinese characters, we need to check for both isupper and islower
         # to match both upper and lower case letters (你 would return false on both).
-        grabbed, stream = grab_until(lambda x: not ((x.isupper() or x.islower()) and x.isalpha()), stream)
+        valid_delims = ["_"]
+        grabbed, stream = grab_until(lambda x: not ((x.isupper() or x.islower() ) and x.isalpha() or x in valid_delims), stream)
         if grabbed:
             return RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "".join(grabbed)), stream
 
