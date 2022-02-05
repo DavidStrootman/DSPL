@@ -14,7 +14,6 @@ class DelimLexerTokenKind(ValuableEnum):
     CLOSE_CURLY = "}"
 
 
-
 class DelimLexerToken(LexerToken):
     def __init__(self, kind: DelimLexerTokenKind):
         super().__init__(kind, kind.value)

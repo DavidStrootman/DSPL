@@ -1,4 +1,3 @@
-from enum import Enum
 from abc import abstractmethod
 from typing import Optional, TYPE_CHECKING
 

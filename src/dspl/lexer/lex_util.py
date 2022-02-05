@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import TextIO
 
 
 @dataclass
@@ -20,4 +19,3 @@ class Word:
     """
     debug_data: DebugData
     content: str
-

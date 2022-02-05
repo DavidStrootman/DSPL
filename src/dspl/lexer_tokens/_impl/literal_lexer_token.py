@@ -19,7 +19,6 @@ class LiteralLexerToken(LexerToken):
         """
         super().__init__(kind, value)
 
-
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
         first_char, stream = stream.grab()

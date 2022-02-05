@@ -12,8 +12,10 @@ if TYPE_CHECKING:
 
 class Helpers(ABC):
     @staticmethod
-    def assert_collect_from_string(text: str, token: Type["LexerToken"], expected_kind: ValuableEnum, expected_value="No expected value provided"):
-
+    def assert_collect_from_string(text: str,
+                                   token: Type["LexerToken"],
+                                   expected_kind: ValuableEnum,
+                                   expected_value="No expected value provided"):
         stream = TextStream(text)
 
         token, stream = token.try_collect(stream)

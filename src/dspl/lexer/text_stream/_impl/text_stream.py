@@ -1,10 +1,6 @@
-from dataclasses import dataclass
-
-from pathlib import Path
-from typing import Callable, Optional, TextIO
+from typing import Callable
 
 from dspl.helper import flatten_rec_seq, mapx, rec_seq, split_last
-from dspl.lexer_tokens import LexerToken
 
 
 # TODO: Just refactor everything with context management. This is far too coupled to file IO atm, can't even lex a

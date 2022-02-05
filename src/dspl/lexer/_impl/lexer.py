@@ -2,14 +2,10 @@
 
 Supplies functionality for reading text from a file and changing them into tokens the parser can accept.
 """
-from collections.abc import Iterator, Iterable, Sequence
-from functools import partial
-from itertools import chain, starmap
+from collections.abc import Iterator, Sequence
 from pathlib import Path
-import re
-from typing import TYPE_CHECKING, TypeAlias, TextIO
 
-from dspl.lexer.lex_util import DebugData
+
 from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
     RawIdentLexerToken, StructuralLexerToken, WhitespaceLexerToken
 from dspl.lexer.text_stream import TextStream

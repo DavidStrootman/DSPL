@@ -1,4 +1,3 @@
-from ast import literal_eval
 import pytest
 
 from dspl.lexer.text_stream import TextStream
