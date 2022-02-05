@@ -12,11 +12,13 @@ from dspl.lexer_tokens import ComplexOpLexerTokenKind, ComplexStructuralLexerTok
 
 class TestLexerToken:
     def test_construct(self):
+        # Assert the base class gets constructed properly and the definition does not change
         assert isinstance(LexerToken(LexerToken._Types.UNSET, "SOME UNSET VALUE"), LexerToken)
 
 
 class TestDelimLexerToken:
     def test_construct(self):
+        # Assert all token kinds can be constructed
         for kind in DelimLexerTokenKind:
             assert DelimLexerToken(kind).kind == kind
             assert DelimLexerToken(kind).value == kind.value
@@ -58,12 +60,14 @@ class TestDelimLexerToken:
         assert result[0] is None
 
     def test_try_collect_none(self):
+        # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             DelimLexerToken.try_collect(None)
 
 
 class TestKeyWordLexerToken:
     def test_construct(self):
+        # Assert all token kinds can be constructed
         for kind in KeywordLexerTokenKind:
             assert KeywordLexerToken(kind).kind == kind
             assert KeywordLexerToken(kind).value == kind.value
@@ -88,16 +92,20 @@ class TestKeyWordLexerToken:
 
         not_a_keyword_ident = RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, text)
 
+        # Assert not all tokens get turned into keyword tokens
         assert KeywordLexerToken.from_raw_ident(not_a_keyword_ident) == not_a_keyword_ident
 
     def test_from_raw_ident_none(self):
+        # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             KeywordLexerToken.from_raw_ident(None)
 
 
 class TestLiteralLexerToken:
     def test_construct(self):
+        # Assert both token kinds can be constructed
         assert isinstance(LiteralLexerToken(LiteralLexerTokenKind.NUMBER, "29"), LiteralLexerToken)
+        assert isinstance(LiteralLexerToken(LiteralLexerTokenKind.STRING, "\"29\""), LiteralLexerToken)
 
     def test_try_collect(self, helpers):
         collectable_text = {
@@ -141,12 +149,14 @@ class TestLiteralLexerToken:
         assert result[0] is None
 
     def test_try_collect_none(self):
+        # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             LiteralLexerToken.try_collect(None)
 
 
 class TestOpLexerToken:
     def test_construct(self):
+        # Assert all token kinds can be constructed
         for kind in OpLexerTokenKind:
             assert OpLexerToken(kind).kind == kind
             assert OpLexerToken(kind).value == kind.value
@@ -173,15 +183,18 @@ class TestOpLexerToken:
 
     def test_try_collect_negative(self):
         text = "not_an_op"
+        # Assert not all tokens get turned into structural tokens
         assert OpLexerToken.try_collect(TextStream(text))[0] is None
 
     def test_try_collect_none(self):
+        # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             OpLexerToken.try_collect(None)
 
 
 class TestRawIdentLexerToken:
     def test_construct(self):
+        # Assert all token kinds can be constructed
         for kind in RawIdentLexerTokenKind:
             assert RawIdentLexerToken(kind, kind.value).kind == kind
             assert RawIdentLexerToken(kind, kind.value).value == kind.value
@@ -193,6 +206,7 @@ class TestRawIdentLexerToken:
             "_",
         ]
 
+        # Assert all valid text can be collected
         for text in collectable_text:
             helpers.assert_collect_from_string(text, RawIdentLexerToken, RawIdentLexerTokenKind.RAW_IDENT, text)
 
@@ -204,16 +218,19 @@ class TestRawIdentLexerToken:
             "🦕",
             ""
         ]
+        # Assert some invalid literals do not get turned into lexer tokens
         for text in non_collectable_text:
             assert RawIdentLexerToken.try_collect(TextStream(text))[0] is None
 
     def test_try_collect_none(self):
+        # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             RawIdentLexerToken.try_collect(None)
 
 
 class TestStructuralLexerToken:
     def test_construct(self):
+        # Assert all token kinds can be constructed
         for kind in RawIdentLexerTokenKind:
             assert RawIdentLexerToken(kind, kind.value).kind == kind
             assert RawIdentLexerToken(kind, kind.value).value == kind.value
@@ -233,16 +250,18 @@ class TestStructuralLexerToken:
 
     def test_try_collect_negative(self):
         text = "-"
-
+        # Assert not all tokens get turned into structural tokens
         assert StructuralLexerToken.try_collect(TextStream(text))[0] is None
 
     def test_try_collect_none(self):
+        # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             StructuralLexerToken.try_collect(None)
 
 
 class TestWhitespaceLexerToken:
     def test_construct(self):
+        # Assert all token kinds can be constructed
         for kind in WhitespaceLexerTokenKind:
             assert WhitespaceLexerToken(kind).kind == kind
             assert WhitespaceLexerToken(kind).value == kind.value
@@ -261,9 +280,11 @@ class TestWhitespaceLexerToken:
 
     def test_try_collect_negative(self):
         text = "some_value"
+        # Assert not all values get turned into whitespacetokens
         assert WhitespaceLexerToken.try_collect(TextStream(text))[0] is None
 
         no_text = ""
+        # Assert no exception is raised for no text
         assert WhitespaceLexerToken.try_collect(TextStream(no_text))[0] is None
 
     def test_try_collect_none(self):
