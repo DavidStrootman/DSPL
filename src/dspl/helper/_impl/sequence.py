@@ -1,12 +1,12 @@
 from typing import Any, TypeVar
 from collections.abc import Callable, Sequence
 
-T: T = TypeVar('T')
+T = TypeVar('T')
 
 rec_seq = Sequence[Any, "rec_iterator"] | Sequence[Any, Any]
 
 
-def flatten_right(seq: rec_seq) -> tuple[Any, Any]:
+def flatten_right(seq: rec_seq) -> tuple[Any, ...]:
     if isinstance(seq, Sequence) and len(seq) <= 1:
         return tuple(seq)
 
@@ -19,6 +19,8 @@ def flatten_right(seq: rec_seq) -> tuple[Any, Any]:
 
 
 def split_last(seq: Sequence[T]) -> tuple[Sequence[T], T]:
+    if len(seq) <= 1:
+        return seq, ()
     return seq[:-1], seq[-1]
 
 

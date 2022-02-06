@@ -1,7 +1,7 @@
-from dspl.helper import flatten_right
+from dspl.helper import flatten_right, split_last
 
 
-def test_flatten_rec_seq():
+def test_flatten_right():
     seq = (3, [3, "final_value"])
     expected = (3, 3, "final_value")
 
@@ -15,7 +15,7 @@ def test_flatten_rec_seq():
     assert flatten_right(seq) == expected
 
 
-def test_flatten_rec_seq_negative():
+def test_flatten_right_negative():
     seq = [3, 3]
 
     # Assert a sequence that cannot be flattened returns the same sequence
@@ -43,7 +43,7 @@ def test_flatten_rec_seq_negative():
     assert flatten_right(seq) == expected
 
 
-def test_flatten_rec_seq_types():
+def test_flatten_right_types():
     list_ = list([3, list([3, 2])])
     tuple_ = tuple([3, (3,)])
 
@@ -56,3 +56,24 @@ def test_flatten_rec_seq_types():
 
     assert flatten_right(mixed_list) == ((2,), [3], 2)
     assert flatten_right(mixed_tuple) == ([2, (3,)], (3,), 2)
+
+
+def test_split_last():
+    # Assert list gets split
+    x = float()
+    assert split_last([1, 2, x]) == ([1, 2], x,)
+    # Assert tuple gets split
+    assert split_last((9, "a", 6,)) == ((9, "a",), 6,)
+
+
+def test_split_last_negative():
+    # Assert sequence with length of one does not get split
+    seq = (2,)
+    expected = (seq, (),)
+    assert split_last(seq) == expected
+
+    # Assert empty sequence works
+    seq = ()
+    expected = (seq, (),)
+
+    assert split_last(seq) == expected
