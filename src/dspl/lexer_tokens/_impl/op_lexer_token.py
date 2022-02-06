@@ -23,6 +23,11 @@ class ComplexOpLexerTokenKind(ValuableEnum):
 
 
 class OpLexerToken(LexerToken):
+    """
+    Operators are the symbols used for logical, mathematical or assignment operations.
+    Operators are used to change the state of the program.
+
+    """
     def __init__(self, kind: OpLexerTokenKind | ComplexOpLexerTokenKind):
         super().__init__(kind, kind.value)
 
