@@ -15,6 +15,10 @@ class ComplexStructuralLexerTokenKind(ValuableEnum):
 
 
 class StructuralLexerToken(LexerToken):
+    """
+    Structural tokens are the structures used to "form" the language. Structural token is pretty much a catch all for
+    tokens that do not belong to other categories.
+    """
     def __init__(self, kind: StructuralLexerTokenKind | ComplexStructuralLexerTokenKind):
         super().__init__(kind, kind.value)
 

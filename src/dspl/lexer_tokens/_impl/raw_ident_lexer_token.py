@@ -10,10 +10,11 @@ class RawIdentLexerTokenKind(ValuableEnum):
 
 
 class RawIdentLexerToken(LexerToken):
+    """
+    Raw identifiers are the initial identifiers lexed from a file. If they match one of the protected keywords, they
+    are expanded into that type.
+    """
     def __init__(self, kind: RawIdentLexerTokenKind, value: str):
-        """
-        Raw Identifiers can be either keywords or plain identifiers
-        """
         super().__init__(kind, value)
 
     @staticmethod
