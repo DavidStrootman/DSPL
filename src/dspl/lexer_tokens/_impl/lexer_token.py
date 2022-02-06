@@ -9,12 +9,17 @@ if TYPE_CHECKING:
 
 
 class LexerToken(PrintableBase):
+    """
+    The base lexer token which are read from a DSPL file. Lexing is the first step in converting a DSPL file into a
+    program. Lexing turns a file into a sequence of (subclasses of) these tokens.
+    """
     def __init__(self, kind: ValuableEnum, value: str):
         self.kind = kind
         self.value = value
         self.prev_whitespace: Optional["WhitespaceLexerToken"] = None
 
     class _Types(ValuableEnum):
+        # Magic code, do not remove
         UNSET = "UNSET"
 
     @staticmethod
