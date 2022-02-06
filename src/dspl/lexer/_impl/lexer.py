@@ -4,7 +4,7 @@ Supplies functionality for reading text from a file and changing them into token
 """
 from collections.abc import Iterator, Sequence
 from pathlib import Path
-
+from typing import Optional
 
 from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
     RawIdentLexerToken, StructuralLexerToken, WhitespaceLexerToken
@@ -36,28 +36,42 @@ def lex_file_contents(stream: TextStream) -> Iterator[LexerToken]:
     return _expand_lexer_tokens(_exhaustive_lex_tokens(stream))
 
 
-def _expand_lexer_token(token: LexerToken) -> LexerToken:
+def _expand_lexer_token(token: LexerToken, whitespace_token: Optional[WhitespaceLexerToken]) -> LexerToken:
     """
     Expands a simple lexer token into a richer lexer token.
     Currently only expands raw identifier tokens into keywords where applicable.
+    Eats whitespace tokens and adds them to the following token.
 
     :param token: The token to expand.
     :return: The expanded token if needed otherwise the input token.
     """
+    expanded_token = token
+
     if isinstance(token, RawIdentLexerToken):
-        return KeywordLexerToken.from_raw_ident(token)
-    return token
+        expanded_token = KeywordLexerToken.from_raw_ident(token)
+
+    if whitespace_token:
+        expanded_token.prev_whitespace = whitespace_token
+
+    return expanded_token
 
 
-def _expand_lexer_tokens(tokens=list[LexerToken]) -> list[LexerToken]:
+def _expand_lexer_tokens(tokens: Iterator[LexerToken], prev_whitespace: Optional[WhitespaceLexerToken] = None) -> list[
+    LexerToken]:
     """
     Expand all lexer tokens from a list.
 
     :param tokens: A list of the tokens to expand.
     :return: The expanded lexer tokens, where applicable.
     """
-    return [_expand_lexer_token(token) for token in tokens]
+    try:
+        token = next(tokens)
+    except StopIteration:
+        return ()
+    if isinstance(token, WhitespaceLexerToken):
+        return _expand_lexer_tokens(tokens, token)
 
+    return (_expand_lexer_token(token, prev_whitespace),) + (_expand_lexer_tokens(tokens))
 
 def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
     """

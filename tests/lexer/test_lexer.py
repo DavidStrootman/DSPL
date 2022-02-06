@@ -30,7 +30,7 @@ class TestLexer:
 
     def test_lex_file_contents(self):
         content1 = "kndfiqwpoieoqw"
-        content2 = " "
+        content2 = ","
         content3 = "dfd"
         stream = TextStream(content1 + content2 + content3)
         result = list(lex_file_contents(stream))
