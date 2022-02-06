@@ -1,6 +1,6 @@
 from typing import Callable
 
-from dspl.helper import flatten_rec_seq, mapx, rec_seq, split_last
+from dspl.helper import flatten_right, mapx, rec_seq, split_last
 
 
 # TODO: Just refactor everything with context management. This is far too coupled to file IO atm, can't even lex a
@@ -43,4 +43,4 @@ def grab_until(pred: Callable[(str), bool], stream: TextStream) -> rec_seq:
 
         return (next_char, _grab_until_internal(pred, stream))
 
-    return mapx((lambda x: "".join(x), lambda x: x), split_last(flatten_rec_seq(_grab_until_internal(pred, stream))))
+    return mapx((lambda x: "".join(x), lambda x: x), split_last(flatten_right(_grab_until_internal(pred, stream))))
