@@ -19,29 +19,53 @@ def lex_file(file: Path) -> Sequence[LexerToken]:
     :return: An iterator over lexer tokens.
     """
     with open(file, 'r', encoding="utf-8") as input_file:
-        # Since the input stream manages context, we must either expand the file in the beginning, or the iterator over
-        #  Lexer tokens in the end, while the file is still open.
         input_stream = TextStream(input_file.read())
+
     contents = tuple(lex_file_contents(input_stream))
 
     return contents
 
 
 def lex_file_contents(stream: TextStream) -> Iterator[LexerToken]:
+    """
+    Lex the contents of a file.
+
+    :param stream: The stream of text to lex from.
+    :return: A list of expanded Lexer tokens.
+    """
     return _expand_lexer_tokens(_exhaustive_lex_tokens(stream))
 
 
 def _expand_lexer_token(token: LexerToken) -> LexerToken:
+    """
+    Expands a simple lexer token into a richer lexer token.
+    Currently only expands raw identifier tokens into keywords where applicable.
+
+    :param token: The token to expand.
+    :return: The expanded token if needed otherwise the input token.
+    """
     if isinstance(token, RawIdentLexerToken):
         return KeywordLexerToken.from_raw_ident(token)
     return token
 
 
 def _expand_lexer_tokens(tokens=list[LexerToken]) -> list[LexerToken]:
+    """
+    Expand all lexer tokens from a list.
+
+    :param tokens: A list of the tokens to expand.
+    :return: The expanded lexer tokens, where applicable.
+    """
     return [_expand_lexer_token(token) for token in tokens]
 
 
 def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
+    """
+    Lex tokens from a text stream until it is empty.
+
+    :param stream: The text stream to lex from.
+    :return: An iterator over lexer tokens, iterates until no more tokens can be lexed.
+    """
     if stream.peek() == "":
         return
     else:
@@ -53,7 +77,7 @@ def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
 
 def lex_token(stream: TextStream) -> tuple[LexerToken, TextStream]:
     """
-    Lex a single word from a Text stream.
+    Lex a single token from a Text stream.
 
     :param stream: The stream to lex from.
     :return: A lexer token and the modified stream.
