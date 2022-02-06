@@ -28,14 +28,21 @@ class OpLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
-        first_char, stream = stream.grab()
-        second_char = stream.peek()
+        """
+        Try collect this token from a TextStream. Only returns a modified TextStream if the collection succeeds.
+
+        :param stream: The stream to try to collect from.
+        :return: If this token can be collected, and instance of this token and the modified TextStream. If this token
+        cannot be collected from the stream, returns None and the unmodified stream.
+        """
+        first_char, modified_stream = stream.grab()
+        second_char = modified_stream.peek()
 
         if first_char + second_char in ComplexOpLexerTokenKind.values():
-            second_char, stream = stream.grab()
-            return OpLexerToken(ComplexOpLexerTokenKind(first_char + second_char)), stream
+            second_char, modified_stream = modified_stream.grab()
+            return OpLexerToken(ComplexOpLexerTokenKind(first_char + second_char)), modified_stream
 
         if first_char in OpLexerTokenKind.values():
-            return OpLexerToken(OpLexerTokenKind(first_char)), stream
+            return OpLexerToken(OpLexerTokenKind(first_char)), modified_stream
 
         return None, stream

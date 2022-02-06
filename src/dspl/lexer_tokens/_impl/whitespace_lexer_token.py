@@ -18,9 +18,16 @@ class WhitespaceLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
-        first_char, stream = stream.grab()
+        """
+        Try collect this token from a TextStream. Only returns a modified TextStream if the collection succeeds.
+
+        :param stream: The stream to try to collect from.
+        :return: If this token can be collected, and instance of this token and the modified TextStream. If this token
+        cannot be collected from the stream, returns None and the unmodified stream.
+        """
+        first_char, modified_stream = stream.grab()
 
         if first_char in WhitespaceLexerTokenKind.values():
-            return WhitespaceLexerToken(WhitespaceLexerTokenKind(first_char)), stream
+            return WhitespaceLexerToken(WhitespaceLexerTokenKind(first_char)), modified_stream
 
         return None, stream

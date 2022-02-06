@@ -18,12 +18,19 @@ class RawIdentLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
+        """
+        Try collect this token from a TextStream. Only returns a modified TextStream if the collection succeeds.
+
+        :param stream: The stream to try to collect from.
+        :return: If this token can be collected, and instance of this token and the modified TextStream. If this token
+        cannot be collected from the stream, returns None and the unmodified stream.
+        """
         # Since we allow A-Za-z, but not for example Chinese characters, we need to check for both isupper and islower
         # to match both upper and lower case letters (你 would return false on both).
         valid_delims = ["_"]
-        grabbed, stream = grab_until(lambda x: not ((x.isupper() or x.islower()) and x.isalpha() or x in valid_delims),
-                                     stream)
+        grabbed, modified_stream = grab_until(
+            lambda x: not ((x.isupper() or x.islower()) and x.isalpha() or x in valid_delims), stream)
         if grabbed:
-            return RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "".join(grabbed)), stream
+            return RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "".join(grabbed)), modified_stream
 
         return None, stream

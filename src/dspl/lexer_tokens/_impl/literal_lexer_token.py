@@ -21,20 +21,27 @@ class LiteralLexerToken(LexerToken):
 
     @staticmethod
     def try_collect(stream: TextStream) -> tuple[Optional[LexerToken], TextStream]:
-        first_char, stream = stream.grab()
+        """
+        Try collect this token from a TextStream. Only returns a modified TextStream if the collection succeeds.
+
+        :param stream: The stream to try to collect from.
+        :return: If this token can be collected, and instance of this token and the modified TextStream. If this token
+        cannot be collected from the stream, returns None and the unmodified stream.
+        """
+        first_char, modified_stream = stream.grab()
 
         if first_char in LiteralLexerTokenKind.values():
             # It's a string literal
-            literal, stream = grab_until(lambda x: x == first_char, stream)
+            literal, modified_stream = grab_until(lambda x: x == first_char, modified_stream)
 
             # Discard closing double quote
-            _, stream = stream.grab()
+            _, modified_stream = modified_stream.grab()
 
-            return LiteralLexerToken(LiteralLexerTokenKind(first_char), literal), stream
+            return LiteralLexerToken(LiteralLexerTokenKind(first_char), literal), modified_stream
 
         if first_char.isnumeric():
             # It's a number literal
-            literal, stream = grab_until(lambda x: not x.isnumeric(), stream)
-            return LiteralLexerToken(LiteralLexerTokenKind.NUMBER, first_char + literal), stream
+            literal, modified_stream = grab_until(lambda x: not x.isnumeric(), modified_stream)
+            return LiteralLexerToken(LiteralLexerTokenKind.NUMBER, first_char + literal), modified_stream
 
         return None, stream
