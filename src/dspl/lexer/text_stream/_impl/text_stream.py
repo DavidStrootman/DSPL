@@ -1,6 +1,6 @@
 from typing import Callable
 
-from dspl.helper import flatten_right, mapx, rec_seq, split_last
+from dspl.helper import flatten_right, mapx, split_last
 
 
 # TODO: Just refactor everything with context management. This is far too coupled to file IO atm, can't even lex a
@@ -37,7 +37,7 @@ class TextStream:
         return self._text[0:count]
 
 
-def grab_until(pred: Callable[(str), bool], stream: TextStream) -> Tuple[str, TextStream]:
+def grab_until(pred: Callable[(str), bool], stream: TextStream) -> tuple[str, TextStream]:
     """
     Grab chars from the beginning of the TextStream until the predicate is true for the next character (exclusive).
 
