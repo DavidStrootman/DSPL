@@ -1,5 +1,7 @@
 import pytest
 
+from dspl.lexer import lex_token
+
 from dspl.lexer.text_stream import TextStream
 from dspl.lexer_tokens import ComplexOpLexerTokenKind, ComplexStructuralLexerTokenKind, DelimLexerToken, \
     DelimLexerTokenKind, KeywordLexerToken, \
@@ -63,6 +65,11 @@ class TestDelimLexerToken:
         with pytest.raises(Exception):
             DelimLexerToken.try_collect(None)
 
+    def test_lex(self):
+        lexed_token = lex_token(TextStream("("))[0]
+        assert lexed_token.kind == DelimLexerToken(DelimLexerTokenKind.OPEN_ROUND).kind
+        assert lexed_token.value == DelimLexerToken(DelimLexerTokenKind.OPEN_ROUND).value
+
 
 class TestKeyWordLexerToken:
     def test_construct(self):
@@ -98,6 +105,11 @@ class TestKeyWordLexerToken:
         # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             KeywordLexerToken.from_raw_ident(None)
+
+    def test_lex(self):
+        lexed_token = lex_token(TextStream("fn"))[0]
+        assert lexed_token.kind == RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "fn").kind
+        assert lexed_token.value == RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "fn").value
 
 
 class TestLiteralLexerToken:
@@ -152,6 +164,11 @@ class TestLiteralLexerToken:
         with pytest.raises(Exception):
             LiteralLexerToken.try_collect(None)
 
+    def test_lex(self):
+        lexed_token = lex_token(TextStream("\"some_string\""))[0]
+        assert lexed_token.kind == LiteralLexerToken(LiteralLexerTokenKind.STRING, "some_string").kind
+        assert lexed_token.value == LiteralLexerToken(LiteralLexerTokenKind.STRING, "some_string").value
+
 
 class TestOpLexerToken:
     def test_construct(self):
@@ -190,6 +207,11 @@ class TestOpLexerToken:
         with pytest.raises(Exception):
             OpLexerToken.try_collect(None)
 
+    def test_lex(self):
+        lexed_token = lex_token(TextStream("="))[0]
+        assert lexed_token.kind == OpLexerToken(OpLexerTokenKind.ASSIGN).kind
+        assert lexed_token.value == OpLexerToken(OpLexerTokenKind.ASSIGN).value
+
 
 class TestRawIdentLexerToken:
     def test_construct(self):
@@ -226,6 +248,11 @@ class TestRawIdentLexerToken:
         with pytest.raises(Exception):
             RawIdentLexerToken.try_collect(None)
 
+    def test_lex(self):
+        lexed_token = lex_token(TextStream("some_ident"))[0]
+        assert lexed_token.kind == RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "some_ident").kind
+        assert lexed_token.value == RawIdentLexerToken(RawIdentLexerTokenKind.RAW_IDENT, "some_ident").value
+
 
 class TestStructuralLexerToken:
     def test_construct(self):
@@ -256,6 +283,11 @@ class TestStructuralLexerToken:
         # Assert an exception is raised whenever trying to collect from None
         with pytest.raises(Exception):
             StructuralLexerToken.try_collect(None)
+
+    def test_lex(self):
+        lexed_token = lex_token(TextStream(";"))[0]
+        assert lexed_token.kind == StructuralLexerToken(StructuralLexerTokenKind.SEMICOLON).kind
+        assert lexed_token.value == StructuralLexerToken(StructuralLexerTokenKind.SEMICOLON).value
 
 
 class TestWhitespaceLexerToken:
@@ -289,3 +321,8 @@ class TestWhitespaceLexerToken:
     def test_try_collect_none(self):
         with pytest.raises(Exception):
             WhitespaceLexerToken.try_collect(None)
+
+    def test_lex(self):
+        lexed_token = lex_token(TextStream(" "))[0]
+        assert lexed_token.kind == WhitespaceLexerToken(WhitespaceLexerTokenKind.SPACE).kind
+        assert lexed_token.value == WhitespaceLexerToken(WhitespaceLexerTokenKind.SPACE).value

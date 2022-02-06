@@ -51,7 +51,7 @@ def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
         yield from _exhaustive_lex_tokens(stream)
 
 
-def lex_token(stream: TextStream) -> LexerToken:
+def lex_token(stream: TextStream) -> tuple[LexerToken, TextStream]:
     """
     Lex a single word from a Text stream.
 
