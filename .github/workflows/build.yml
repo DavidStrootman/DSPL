@@ -65,6 +65,6 @@ jobs:
         # User defined upload name. Visible in Codecov UI
         #         name:
         # Specify whether the Codecov output should be verbose
-        verbose: True
+        verbose: False
         # Directory in which to execute codecov.sh
         # working-directory:
