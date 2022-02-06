@@ -73,6 +73,7 @@ def _expand_lexer_tokens(tokens: Iterator[LexerToken], prev_whitespace: Optional
 
     return (_expand_lexer_token(token, prev_whitespace),) + (_expand_lexer_tokens(tokens))
 
+
 def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
     """
     Lex tokens from a text stream until it is empty.
