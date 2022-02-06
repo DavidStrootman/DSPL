@@ -13,6 +13,10 @@ class WhitespaceLexerTokenKind(ValuableEnum):
 
 
 class WhitespaceLexerToken(LexerToken):
+    """
+    Whitespace tokens describe all allowed types of whitespace read from a DSPL file. They are consumed during expansion
+    of a simple lexer token.
+    """
     def __init__(self, kind: WhitespaceLexerTokenKind):
         super().__init__(kind, kind.value)
 
