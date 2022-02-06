@@ -34,4 +34,12 @@ def mapx(fns: Sequence[Callable], seq: Sequence[T]) -> tuple[T]:
 
         return fns_[0](seq_[0]), _mapx_internal(fns_[1:], seq_[1:])
 
+    # Edge case if seq or fns is empty
+    if len(seq) == 0 or len(fns) == 0:
+        return tuple(seq)
+
+    # Edge case if seq has length 1
+    if len(seq) == 1:
+        return fns[0](seq[0]),  # I hate this syntax what is this comma doing here like come on
+
     return _mapx_internal(fns, seq)
