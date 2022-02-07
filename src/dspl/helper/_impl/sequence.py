@@ -8,7 +8,9 @@ rec_seq = Sequence[Any, "rec_iterator"] | Sequence[Any, Any]
 
 def flatten_right(seq: rec_seq) -> tuple[Any, ...]:
     """
-    Flatten a recursive sequence, only on the right-most value.
+    Flatten a recursive sequence, only on the right-most value. This function is used to flatten the recursive tuple
+    return by mapx.
+
     For example:
         (1, 2, (3)) -> (1, 2, 3)
         (1, (2, (3, (4, )))) -> (1, 2, 3, 4)

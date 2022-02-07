@@ -6,6 +6,7 @@ from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import Optional
 
+from dspl.helper import flatten_right, mapx
 from dspl.lexer_tokens import LexerToken, DelimLexerToken, KeywordLexerToken, LiteralLexerToken, OpLexerToken, \
     RawIdentLexerToken, StructuralLexerToken, WhitespaceLexerToken
 from dspl.lexer.text_stream import TextStream
@@ -21,7 +22,7 @@ def lex_file(file: Path) -> Sequence[LexerToken]:
     with open(file, 'r', encoding="utf-8") as input_file:
         input_stream = TextStream(input_file.read())
 
-    contents = tuple(lex_file_contents(input_stream))
+    contents = lex_file_contents(input_stream)
 
     return contents
 
@@ -64,14 +65,13 @@ def _expand_lexer_tokens(tokens: Iterator[LexerToken], prev_whitespace: Optional
     :param tokens: A list of the tokens to expand.
     :return: The expanded lexer tokens, where applicable.
     """
-    try:
-        token = next(tokens)
-    except StopIteration:
+    if not tokens:
         return ()
-    if isinstance(token, WhitespaceLexerToken):
-        return _expand_lexer_tokens(tokens, token)
 
-    return (_expand_lexer_token(token, prev_whitespace),) + (_expand_lexer_tokens(tokens))
+    if isinstance(tokens[0], WhitespaceLexerToken):
+        return _expand_lexer_tokens(tokens[1:], tokens[0])
+
+    return (_expand_lexer_token(tokens[0], prev_whitespace),) + _expand_lexer_tokens(tokens[1:])
 
 
 def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
@@ -82,12 +82,9 @@ def _exhaustive_lex_tokens(stream: TextStream) -> Iterator[LexerToken]:
     :return: An iterator over lexer tokens, iterates until no more tokens can be lexed.
     """
     if stream.peek() == "":
-        return
-    else:
-        # We do a little unpacking
-        token, stream = lex_token(stream)
-        yield token
-        yield from _exhaustive_lex_tokens(stream)
+        return ()
+
+    return flatten_right(mapx(fns=[(lambda x: x), (lambda y: _exhaustive_lex_tokens(y))], seq=lex_token(stream)))
 
 
 def lex_token(stream: TextStream) -> tuple[LexerToken, TextStream]:
