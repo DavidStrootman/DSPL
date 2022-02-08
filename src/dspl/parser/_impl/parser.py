@@ -6,11 +6,11 @@ from dspl.parser_tokens import ParserToken
 
 
 def parse(lexer_tokens: Sequence[LexerToken]):
-    def _parse_internal(lexer_tokens: Sequence[LexerToken]):
-        if not lexer_tokens:
+    def _parse_internal(lexer_tokens_: Sequence[LexerToken]):
+        if not lexer_tokens_:
             return ()
         else:
-            return flatten_right(mapx(fns=[(lambda x: x), (lambda y: parse(y))], seq=parse_token(lexer_tokens)))
+            return flatten_right(mapx(fns=[(lambda x: x), (lambda y: parse(y))], seq=parse_token(lexer_tokens_)))
 
     return _parse_internal(lexer_tokens)
 
