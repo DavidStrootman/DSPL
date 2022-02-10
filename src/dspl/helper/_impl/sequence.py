@@ -33,14 +33,32 @@ def flatten_right(seq: rec_seq) -> tuple[Any, ...]:
 
 def split_last(seq: Sequence[T]) -> tuple[Sequence[T], T]:
     """
-    Split the last item from a sequence.
+    Tail-first split a sequence into head and tail.
 
     :param seq: The sequence to split from
     :return: The new sequence and the split item
     """
     if len(seq) <= 1:
         return seq, ()
-    return seq[:-1], seq[-1]
+
+    # Or return seq[:-1], seq[-1] whatever
+    *tail, head = seq
+    return tail, head
+
+
+def split_first(seq: Sequence[T]) -> tuple[T, Sequence[T]]:
+    """
+    Head-first split a sequence into head and tail.
+
+    :param seq: The sequence to split from
+    :return: The new sequence and the split item
+    """
+    if len(seq) <= 1:
+        return seq, ()
+
+    # Or return seq[:-1], seq[-1] whatever
+    tail, *head = seq
+    return tail, head
 
 
 def mapx(fns: Sequence[Callable], seq: Sequence[T]) -> tuple[T]:
