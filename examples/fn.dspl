@@ -1,0 +1,9 @@
+fn func(n: int) -> int {
+    int result = 0
+
+    str result = "hey"
+    result = "hi"
+    result
+}
+
+func()

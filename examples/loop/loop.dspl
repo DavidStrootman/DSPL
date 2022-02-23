@@ -1,6 +1,6 @@
 bind print = bind("echo");
 
-fn summy(n) -> int {
+fn summy(n: int) -> int {
     int result = 0
     while n >= 1 {
         result += n

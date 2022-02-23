@@ -19,6 +19,7 @@ class KeywordLexerToken(LexerToken):
     """
     Keyword lexer tokens describe protected keyword identifiers, such as fn which denotes a function.
     """
+
     def __init__(self, kind: KeywordLexerTokenKind):
         super().__init__(kind, kind.value)
 

@@ -1,7 +1,13 @@
 from typing import Any, TypeVar
 from collections.abc import Callable, Sequence
 
+
+class GenericTypeVar(TypeVar, _root=True):
+    def __getitem__(self, item): pass
+
+
 T = TypeVar('T')
+S = GenericTypeVar('S', bound=Sequence)
 
 rec_seq = Sequence[Any, "rec_iterator"] | Sequence[Any, Any]
 
@@ -15,7 +21,7 @@ def flatten_right(seq: rec_seq) -> tuple[Any, ...]:
         (1, 2, (3)) -> (1, 2, 3)
         (1, (2, (3, (4, )))) -> (1, 2, 3, 4)
         (1, 2, (3, (4, ))) -> (1, 2, 3, 4)
-        ((1, ), 2, ((3, ), 4) -> ((1, ), 2), (3), 4)
+        ((1, ), 2, ((3, ), 4) -> ((1, ), 2, (3, ), 4)
 
     :param seq: The sequence to flatten
     :return: The flattened sequence as a tuple
@@ -31,7 +37,7 @@ def flatten_right(seq: rec_seq) -> tuple[Any, ...]:
     return tuple(seq)
 
 
-def split_last(seq: Sequence[T]) -> tuple[Sequence[T], T]:
+def split_last(seq: S[T]) -> tuple[S[T], T]:
     """
     Tail-first split a sequence into head and tail.
 
